@@ -20,7 +20,6 @@ import {
 } from './engine.js'
 
 export const INTRO_TEXT = 'Como não sei onde te encontrar pra te dar um toma aí, meu anjo'
-const HINT = 'toque no presente'
 
 // Duração da abertura (s), até o buquê assumir a tela.
 export const OPEN_DURATION = 1.6
@@ -37,7 +36,6 @@ const C = {
   inside: hex('#3a0a19'),
   glow: hex('#ffb0cc'),
   text: hex('#f2c4d6'),
-  hint: hex('#b98aa0'),
 }
 
 const COS30 = Math.cos(Math.PI / 6);
@@ -329,15 +327,6 @@ export function createIntro(cols, rows) {
         }
       }
 
-      // dica para tocar, depois que o texto termina
-      if (!opening && t > typeEnd + 1) {
-        const a = smooth(typeEnd + 1, typeEnd + 2, t) * (0.55 + 0.45 * Math.sin(t * 2.4));
-        const r = Math.min(rows - 2, Math.round((yb + S) / ASPECT) + 4);
-        const c0 = Math.floor((cols - HINT.length) / 2);
-        for (let i = 0; i < HINT.length; i++) {
-          if (HINT[i] !== ' ') fr.set(c0 + i, r, HINT[i], mul(C.hint, a));
-        }
-      }
       // texto por último: nada passa por cima dele
       drawText(t, fadeAll);
       return fr;
