@@ -115,10 +115,19 @@ export class Frame {
     this.r = new Uint8ClampedArray(n);
     this.g = new Uint8ClampedArray(n);
     this.b = new Uint8ClampedArray(n);
+    this.texts = [];
   }
 
   clear() {
     this.ch.fill(' ');
+    this.texts.length = 0;
+  }
+
+  // Texto desenhado à parte, maior que a grade (mensagem e nome da flor).
+  // row: linha da grade onde fica centralizado; chars: [{ ch, col }] com
+  // largura fixa (caracteres ainda ocultos vêm com ch = ' ').
+  text(row, chars) {
+    this.texts.push({ row, chars });
   }
 
   // escurece o que já foi desenhado (sombra projetada)
@@ -679,12 +688,11 @@ const CAPTION = "B E G O N I A   ' L A M O O N '";
 function drawCaption(fr, lay, t) {
   const a = smooth(BLOOM_END - 2.5, BLOOM_END, t);
   if (a <= 0) return;
-  const c0 = Math.floor((lay.cols - CAPTION.length) / 2);
-  for (let i = 0; i < CAPTION.length; i++) {
-    if (CAPTION[i] === ' ') continue;
+  const chars = CAPTION.split('').map((ch, i) => {
     const shimmer = 0.75 + 0.25 * Math.sin(t * 1.6 - i * 0.35);
-    fr.set(c0 + i, lay.captionRow, CAPTION[i], mul(P.caption, a * shimmer));
-  }
+    return { ch, col: mul(P.caption, a * shimmer) };
+  });
+  fr.text(lay.captionRow, chars);
 }
 
 // ---------------------------------------------------------------- API

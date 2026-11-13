@@ -249,15 +249,15 @@ export function createIntro(cols, rows) {
   function drawText(t, alpha) {
     let shown = Math.floor((t - typeStart) * typeRate);
     lines.forEach((line, li) => {
-      const c0 = Math.floor((cols - line.length) / 2);
-      for (let i = 0; i < line.length; i++) {
-        if (shown <= 0) return;
-        shown--;
-        if (line[i] === ' ') continue;
+      // largura fixa: letras ainda não digitadas ficam como espaço, para a
+      // linha não "andar" enquanto é digitada
+      const chars = line.split('').map((ch, i) => {
+        const vis = shown-- > 0;
         const shimmer = 0.82 + 0.18 * Math.sin(t * 1.8 - (i + li * 7) * 0.3);
-        fr.set(c0 + i, textRow + li * 2, line[i], mul(C.text, alpha * shimmer));
-      }
+        return { ch: vis ? ch : ' ', col: mul(C.text, alpha * shimmer) };
+      });
       shown--; // espaço da quebra de linha
+      fr.text(textRow + li * 2, chars);
     });
   }
 

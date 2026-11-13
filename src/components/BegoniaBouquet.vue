@@ -16,6 +16,9 @@ const FONT = '"DejaVu Sans Mono", "Menlo", "Consolas", "Courier New", monospace'
 // Largura mínima (px) de um caractere para o ASCII continuar legível.
 const MIN_CELL = 5.4
 
+// Textos (mensagem e nome da flor) ficam maiores que a grade da arte.
+const TEXT_SCALE = 1.5
+
 // Em telas grandes usa a grade fixa do desktop, escalada para caber.
 // Em telas pequenas mantém o caractere legível e reduz a grade; o motor
 // então remonta o buquê para a grade disponível.
@@ -139,6 +142,20 @@ export default {
           }
           ctx.fillText(ch, origin.x + (c + 0.5) * cell.w, y)
         }
+      }
+
+      // textos maiores, centralizados na sua linha; encolhem se não couberem
+      for (const { row, chars } of fr.texts) {
+        const scale = Math.min(TEXT_SCALE, (size.w * 0.94) / (chars.length * cell.w))
+        const adv = cell.w * scale
+        const x0 = size.w / 2 - (chars.length * adv) / 2
+        const y = origin.y + (row + 0.5) * cell.h
+        ctx.font = `${(adv / 0.6).toFixed(2)}px ${FONT}`
+        chars.forEach(({ ch, col }, i) => {
+          if (ch === ' ') return
+          ctx.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`
+          ctx.fillText(ch, x0 + (i + 0.5) * adv, y)
+        })
       }
     },
   },
