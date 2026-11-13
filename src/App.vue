@@ -1,26 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <BegoniaBouquet />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import BegoniaBouquet from './components/BegoniaBouquet.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    BegoniaBouquet
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
 }
 </style>
